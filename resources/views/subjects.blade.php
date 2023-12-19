@@ -10,7 +10,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     @foreach ($subjects as $subject)
-                        <a href="{{route('tutors.index', $subject->id)}}"  class="w-32 m-4 p-2 border-solid border-2 hover:border-solid rounded-md border-sky-900 hover:border-sky-400">{{ $subject->name }}</a>
+                        <a href="{{route('tutors.show', $subject->id)}}"  class="w-32 m-4 p-2 border-solid border-2 hover:border-solid rounded-md border-sky-900 hover:border-sky-400">{{ $subject->name }}</a>
                     @endforeach
                 </div>
             </div>

@@ -9,12 +9,13 @@ class Timetable extends Model
 {
     use HasFactory;
 
-    protected $table = 'subject';
+    protected $table = 'timetable';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'date',
         'tutorID',
         'subjectID',
+        'week',
+        'day',
         'userID',
         'isAccept'
     ];

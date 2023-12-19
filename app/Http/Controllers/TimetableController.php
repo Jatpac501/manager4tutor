@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Timetable;
 use Illuminate\Http\Request;
 
@@ -10,11 +11,9 @@ class TimetableController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(string $id)
+    public function index()
     {
-        return view('timetable', [
-            'timetable' => Timetable::where('tutorID', $id)->get(),
-        ]);
+        return view('timetable');
     }
 
     /**
@@ -30,7 +29,10 @@ class TimetableController extends Controller
      */
     public function show(Timetable $timetable)
     {
-        //
+        return view('timetable', [
+            'timetable' => Timetable::where('tutorID', $timetable->id)->get(),
+            'tutor' => User::find($timetable->id)->first(),
+        ]);
     }
 
     /**

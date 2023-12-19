@@ -10,7 +10,7 @@ class TutorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(string $id)
     {
         return view('tutors',[
             'tutors' => User::where('tutor', 1)->get(),
@@ -36,9 +36,11 @@ class TutorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(User $user, string $id)
     {
-        //
+        return view('tutors',[
+            'tutors' => User::where('tutor', $id)->get(),
+            ]);
     }
 
     /**
