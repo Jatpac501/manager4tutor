@@ -26,8 +26,17 @@
                                                         @else
                                                             <div class="">Ожидание</div>
                                                         @endif
-                                                        <button class="text-green-600">Принять</button>
-                                                        <button class="text-red-600">Отклонить</button>
+                                                            <form method="POST" action="{{ route('timetable.update', [$event->id]) }}" class="mb-3" autocomplete="off">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <button class="text-green-600">Принять</button>
+                                                            </form>
+                                                            <form method="POST" action="{{ route('timetable.update', [$event->id]) }}" class="mb-3" autocomplete="off">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button class="text-red-600">Отклонить</button>
+                                                            </form>
+
                                                     </td>
                                                 @else
                                                     <td class="text-center border-solid border hover:border-solid rounded-md">
@@ -46,3 +55,4 @@
         </div>
     </div>
 </x-app-layout>
+

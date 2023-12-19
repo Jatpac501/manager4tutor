@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TimetableRequest;
 use App\Models\User;
 use App\Models\Subject;
 use App\Models\Timetable;
@@ -42,7 +43,7 @@ class TimetableController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Timetable $timetable)
+    public function update(TimetableRequest $request, Timetable $timetable)
     {
         //
     }
