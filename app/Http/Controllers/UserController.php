@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Timetable;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class Timetable extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +26,7 @@ class Timetable extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Timetable $timetable)
+    public function show(User $user)
     {
         //
     }
@@ -35,7 +34,7 @@ class Timetable extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Timetable $timetable)
+    public function update(Request $request, User $user)
     {
         //
     }
@@ -43,7 +42,7 @@ class Timetable extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Timetable $timetable)
+    public function destroy(User $user)
     {
         //
     }

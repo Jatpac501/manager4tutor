@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Subject;
+use App\Models\Timetable;
 use Illuminate\Http\Request;
 
-class Subject extends Controller
+class TimetableController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +26,7 @@ class Subject extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Subject $subject)
+    public function show(Timetable $timetable)
     {
         //
     }
@@ -35,7 +34,7 @@ class Subject extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Subject $subject)
+    public function update(Request $request, Timetable $timetable)
     {
         //
     }
@@ -43,7 +42,7 @@ class Subject extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Subject $subject)
+    public function destroy(Timetable $timetable)
     {
         //
     }
