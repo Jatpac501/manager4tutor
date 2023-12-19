@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('timetable', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
             $table->integer('tutorID');
             $table->integer('subjectID');
+            $table->integer('week');
+            $table->integer('day');
             $table->integer('userID');
             $table->boolean('isAccept')->default(false);
             $table->timestamps();

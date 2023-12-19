@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\TutorController;
+use App\Http\Controllers\TimetableController;
+use App\Http\Controllers\SubjectController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,9 +18,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
 
-Route::view('dashboard', 'dashboard')
+Route::view('subject', 'subjects')
     ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+    ->name('subjects');
+
+Route::resource('subjects', SubjectController::class);
+Route::resource('tutors', TutorController::class);
+Route::resource('timetable', TimetableController::class)->middleware(['auth']);
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])
