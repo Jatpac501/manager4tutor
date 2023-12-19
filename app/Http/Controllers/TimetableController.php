@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Subject;
 use App\Models\Timetable;
 use Illuminate\Http\Request;
+use Mockery\Matcher\Subset;
 
 class TimetableController extends Controller
 {
@@ -32,6 +34,8 @@ class TimetableController extends Controller
         return view('timetable', [
             'timetable' => Timetable::where('tutorID', $timetable->id)->get(),
             'tutor' => User::find($timetable->id)->first(),
+            'users' => User::get(),
+            'subjects' => Subject::get(),
         ]);
     }
 

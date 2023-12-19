@@ -3,6 +3,7 @@
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Расписание' ) }}
             {{ $tutor->name }}
+            ({{ $tutor->subject->name }})
         </h2>
     </x-slot>
     <div class="py-12">
@@ -11,12 +12,32 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <table class="table-fixed w-full">
                         <tbody>
-                            @for ($i = 1; $i <= 5; $i++)
-                                <tr class="h-40">
-                                    @for ($d = 1; $d <= 7; $d++)
-                                        <td class="p-2 border-solid border hover:border-solid rounded-md">{{$i*$d}}</td>
-                                    @endfor
-                                </tr>
+                            @for ($w = 1; $w <= 4; $w++)
+                                    <tr class="h-40">
+                                        @for ($d = 1; $d <= 7; $d++)
+                                            @foreach ($timetable as $event)
+                                                @if ($event->day == $d && $event->week == $w)
+                                                    <td class="text-center border-solid border hover:border-solid rounded-md">
+                                                        <div class="">{{$d}} день {{$w}} неделя</div>
+                                                        <div class="">{{$event->subject->name}}</div>
+                                                        <div class="">{{$event->user->name}}</div>
+                                                        @if ($event->isAccept)
+                                                            <div class="">Принято</div>
+                                                        @else
+                                                            <div class="">Ожидание</div>
+                                                        @endif
+                                                        <button class="text-green-600">Принять</button>
+                                                        <button class="text-red-600">Отклонить</button>
+                                                    </td>
+                                                @else
+                                                    <td class="text-center border-solid border hover:border-solid rounded-md">
+                                                        <div class="">{{$d}} день {{$w}} неделя</div>
+                                                        <button class="text-yellow-600">Свободно</button>
+                                                    </td>
+                                                @endif
+                                            @endforeach
+                                        @endfor
+                                    </tr>
                             @endfor
                         </tbody>
                       </table>
