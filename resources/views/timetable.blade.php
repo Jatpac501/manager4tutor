@@ -14,40 +14,50 @@
                         <tbody>
                             @for ($w = 1; $w <= 4; $w++)
                                     <tr class="h-40">
-                                        @for ($d = 1; $d <= 7; $d++)
-                                            @foreach ($timetable as $event)
-                                                @if ($event->day == $d && $event->week == $w)
-                                                    <td class="text-center border-solid border hover:border-solid rounded-md">
-                                                        <div class="">{{$d}} день {{$w}} неделя</div>
-                                                        <div class="">{{$event->subject->name}}</div>
-                                                        <div class="">{{$event->user->name}}</div>
-                                                        @if ($event->isAccept)
-                                                            <div class="">Принято</div>
-                                                        @else
-                                                            <div class="">Ожидание</div>
-                                                        @endif
-                                                            <form method="POST" action="{{ route('timetable.update', [$event->id]) }}" class="mb-3" autocomplete="off">
-                                                                @csrf
-                                                                @method('PUT')
-                                                                <button class="text-green-600">Принять</button>
-                                                            </form>
-                                                            <form method="POST" action="{{ route('timetable.update', [$event->id]) }}" class="mb-3" autocomplete="off">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button class="text-red-600">Отклонить</button>
-                                                            </form>
-
-                                                    </td>
-                                                @else
-                                                    <td class="text-center border-solid border hover:border-solid rounded-md">
-                                                        <div class="">{{$d}} день {{$w}} неделя</div>
-                                                        <button class="text-yellow-600">Свободно</button>
-                                                    </td>
-                                                @endif
-                                            @endforeach
-                                        @endfor
+                                        @foreach([1, 2, 3, 4, 5, 6, 7] as $d)
+                                            @php
+                                                $event = App\Models\Timetable::where('week', $w)->where('day', $d)->first();
+                                            @endphp
+                                            @if ($event)
+                                                <td class="text-center border-solid border hover:border-solid rounded-md">
+                                                    <div class="">{{$d}} день {{$w}} неделя</div>
+                                                    <div class="">{{$event->subject->name}}</div>
+                                                    <div class="">{{$event->user->name}}</div>
+                                                    @if ($event->isAccept)
+                                                        <div class="">Принято</div>
+                                                    @else
+                                                        <div class="">Ожидание</div>
+                                                        <form method="POST" action="{{ route('timetable.update', [$event->id]) }}" class="mb-3" autocomplete="off">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <input name="isAccept" class="hidden" value="1" required>
+                                                            <button class="text-green-600" type="submit">Принять</button>
+                                                        </form>
+                                                    @endif
+                                                    <form method="POST" action="{{ route('timetable.destroy', [$event->id]) }}" class="mb-3" autocomplete="off">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="text-red-600" type="submit">Отклонить</button>
+                                                    </form>
+                                                </td>
+                                            @else
+                                                <td class="text-center border-solid border hover:border-solid rounded-md">
+                                                    <div class="">{{$d}} день {{$w}} неделя</div>
+                                                    <form method="POST" action="{{route('timetable.store')}}" autocomplete="off">
+                                                        @csrf
+                                                        <input class="hidden" name="week" value="{{ $w }}" required >
+                                                        <input class="hidden" name="day" value="{{ $d }}" required >
+                                                        <input class="hidden" name="tutorID" value="{{ $tutor->id }}" required >
+                                                        <input class="hidden" name="subjectID" value="{{ $tutor->subject->id }}" required >
+                                                        <input class="hidden" name="userID" value="{{ $auth->id }}" required >
+                                                        <button class="text-yellow-600" type="submit">Свободно</button>
+                                                    </form>
+                                                </td>
+                                            @endif
+                                        @endforeach
                                     </tr>
                             @endfor
+
                         </tbody>
                       </table>
                 </div>

@@ -11,7 +11,7 @@ class TimetableRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -27,7 +27,6 @@ class TimetableRequest extends FormRequest
             'week'=>'required|integer|max:4',
             'day'=>'required|integer|max:7',
             'userID'=>'required|string|max:100',
-            'isAccept'=>'required|boolean'
         ];
     }
 }

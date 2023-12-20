@@ -39,7 +39,7 @@ class TutorController extends Controller
     public function show(User $user, string $id)
     {
         return view('tutors',[
-            'tutors' => User::where('tutor', $id)->get(),
+            'tutors' => User::where('tutor', 1)->get(),
             ]);
     }
 
