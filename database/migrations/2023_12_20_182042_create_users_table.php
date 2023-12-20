@@ -20,6 +20,7 @@ return new class extends Migration
             $table->boolean('tutor')->default(false);
             $table->integer('subjectID')->nullable();
             $table->rememberToken();
+            $table->string('role')->default('user');
             $table->timestamps();
         });
     }

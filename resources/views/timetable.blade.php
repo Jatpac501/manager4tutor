@@ -27,18 +27,22 @@
                                                         <div class="">Принято</div>
                                                     @else
                                                         <div class="">Ожидание</div>
-                                                        <form method="POST" action="{{ route('timetable.update', [$event->id]) }}" class="mb-3" autocomplete="off">
+                                                        @if ($auth->role == 'admin')
+                                                            <form method="POST" action="{{ route('timetable.update', [$event->id]) }}" class="mb-3" autocomplete="off">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <input name="isAccept" class="hidden" value="1" required>
+                                                                <button class="text-green-600" type="submit">Принять</button>
+                                                            </form>
+                                                        @endif
+                                                    @endif
+                                                    @if ($auth->role == 'admin'|| $auth->id == $event->userID || $auth->id == $event->tutorID )
+                                                        <form method="POST" action="{{ route('timetable.destroy', [$event->id]) }}" class="mb-3" autocomplete="off">
                                                             @csrf
-                                                            @method('PUT')
-                                                            <input name="isAccept" class="hidden" value="1" required>
-                                                            <button class="text-green-600" type="submit">Принять</button>
+                                                            @method('DELETE')
+                                                            <button class="text-red-600" type="submit">Отклонить</button>
                                                         </form>
                                                     @endif
-                                                    <form method="POST" action="{{ route('timetable.destroy', [$event->id]) }}" class="mb-3" autocomplete="off">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button class="text-red-600" type="submit">Отклонить</button>
-                                                    </form>
                                                 </td>
                                             @else
                                                 <td class="text-center border-solid border hover:border-solid rounded-md">

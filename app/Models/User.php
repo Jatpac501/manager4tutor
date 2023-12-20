@@ -49,4 +49,22 @@ class User extends Authenticatable
     public function subject() {
         return $this->belongsTo(Subject::class, 'subjectID');
     }
+    public function roles() {
+        return $this->BelongsToMany(Role::class);
+    }
+    public function checkRoles($roles) {
+        if (! is_array($roles)) {
+            $roles=[$roles];
+        }
+        if (! $this->hasAnyRoles($roles)) {
+            auth()->logout();
+            abort(404);
+        }
+    }
+    public function hasAnyRoles($roles): bool {
+        return (bool) $this->roles()->whereIn('name', $roles)->first();
+    }
+    public function hasRoles($role): bool {
+        return (bool) $this->roles()->where('name', $role)->first();
+    }
 }

@@ -9,6 +9,7 @@ use App\Models\Timetable;
 use Illuminate\Http\Request;
 use Mockery\Matcher\Subset;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class TimetableController extends Controller
 {
@@ -36,10 +37,12 @@ class TimetableController extends Controller
     {
         $auth = Auth::user();
         $timetable = Timetable::where('tutorID', $id)->get();
-        $tutor = User::find($id)->first();
+        $tutor = User::where('id', $id)->first();
         $users = User::get();
         $subjects = Subject::get();
-        return view('timetable', compact('auth','timetable', 'tutor', 'users','subjects'));
+        return $auth->role == 'user'
+            ? view('timetable', compact('auth','timetable', 'tutor', 'users','subjects'))
+            : abort(403);
     }
 
     /**
