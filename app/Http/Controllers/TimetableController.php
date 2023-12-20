@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\EventProcessed;
 use App\Http\Requests\TimetableRequest;
 use App\Models\User;
 use App\Models\Subject;
@@ -26,7 +27,9 @@ class TimetableController extends Controller
      */
     public function store(TimetableRequest $request)
     {
-        Timetable::create($request->validated());
+        $validatedData = $request->validated();
+        $timetable = Timetable::create($validatedData);
+        event(new EventProcessed($timetable));
         return redirect()->back();
     }
 
@@ -59,7 +62,13 @@ class TimetableController extends Controller
      */
     public function destroy(string $id)
     {
-        Timetable::findOrFail($id)->delete();
-        return redirect()->back();
+        if (Auth::user()->role == 'admin' ||
+            Auth::user()->id == Timetable::findOrFail($id)->userID ||
+            Auth::user()->id == Timetable::findOrFail($id)->tutorID) {
+            Timetable::findOrFail($id)->delete();
+            return redirect()->back();
+        } else {
+            return abort(403);
+        }
     }
 }
