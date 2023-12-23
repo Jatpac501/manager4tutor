@@ -7,10 +7,7 @@ use App\Http\Requests\TimetableRequest;
 use App\Models\User;
 use App\Models\Subject;
 use App\Models\Timetable;
-use Illuminate\Http\Request;
-use Mockery\Matcher\Subset;
 use Illuminate\Support\Facades\Auth;
-use App\Notifications\EventProcessedNotification;
 
 class TimetableController extends Controller
 {
@@ -30,8 +27,6 @@ class TimetableController extends Controller
         $validatedData = $request->validated();
         $timetable = Timetable::create($validatedData);
         $test = event(new EventProcessed($timetable));
-        auth()->user()->notify(new EventProcessedNotification());
-        dd($test);
         return redirect()->back();
     }
 
