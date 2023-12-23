@@ -21,7 +21,7 @@ class EventProcessed
 
     public function __construct(
         public Timetable $event,
-    ) {}
+    ) { return '123';}
 
     /**
      * Get the channels the event should broadcast on.

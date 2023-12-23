@@ -22,6 +22,5 @@ class SendEventNotification
      */
     public function handle(EventProcessed $event)
     {
-        dd($event);
     }
 }

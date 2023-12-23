@@ -10,7 +10,7 @@ use App\Models\Timetable;
 use Illuminate\Http\Request;
 use Mockery\Matcher\Subset;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Notifications\EventProcessedNotification;
 
 class TimetableController extends Controller
 {
@@ -29,7 +29,9 @@ class TimetableController extends Controller
     {
         $validatedData = $request->validated();
         $timetable = Timetable::create($validatedData);
-        event(new EventProcessed($timetable));
+        $test = event(new EventProcessed($timetable));
+        auth()->user()->notify(new EventProcessedNotification());
+        dd($test);
         return redirect()->back();
     }
 
@@ -43,7 +45,7 @@ class TimetableController extends Controller
         $tutor = User::where('id', $id)->first();
         $users = User::get();
         $subjects = Subject::get();
-        return $auth->role == 'user'
+        return $auth->role != null
             ? view('timetable', compact('auth','timetable', 'tutor', 'users','subjects'))
             : abort(403);
     }

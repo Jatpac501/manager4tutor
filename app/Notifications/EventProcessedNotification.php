@@ -6,8 +6,9 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class EventCreatedNotification extends Notification
+class EventProcessedNotification extends Notification
 {
     use Queueable;
 
@@ -19,6 +20,13 @@ class EventCreatedNotification extends Notification
         //
     }
 
+    public function toBroadcast(object $notifiable): BroadcastMessage
+    {
+        error_log('Добавилась заявка');
+        return new BroadcastMessage([
+            'data' => 'Уведомление: Ваше событие было успешно обработано!',
+        ]);
+    }
     /**
      * Get the notification's delivery channels.
      *
@@ -26,7 +34,7 @@ class EventCreatedNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['broadcast'];
     }
 
     /**

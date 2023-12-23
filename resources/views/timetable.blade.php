@@ -6,64 +6,62 @@
             ({{ $tutor->subject->name }})
         </h2>
     </x-slot>
-    <div class="py-12">
+    <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <table class="table-fixed w-full">
-                        <tbody>
-                            @for ($w = 1; $w <= 4; $w++)
-                                    <tr class="h-40">
-                                        @foreach([1, 2, 3, 4, 5, 6, 7] as $d)
-                                            @php
-                                                $event = App\Models\Timetable::where('week', $w)->where('day', $d)->first();
-                                            @endphp
-                                            @if ($event)
-                                                <td class="text-center border-solid border hover:border-solid rounded-md">
-                                                    <div class="">{{$d}} день {{$w}} неделя</div>
-                                                    <div class="">{{$event->subject->name}}</div>
-                                                    <div class="">{{$event->user->name}}</div>
-                                                    @if ($event->isAccept)
-                                                        <div class="">Принято</div>
-                                                    @else
-                                                        <div class="">Ожидание</div>
-                                                        @if ($auth->role == 'admin')
-                                                            <form method="POST" action="{{ route('timetable.update', [$event->id]) }}" class="mb-3" autocomplete="off">
-                                                                @csrf
-                                                                @method('PUT')
-                                                                <input name="isAccept" class="hidden" value="1" required>
-                                                                <button class="text-green-600" type="submit">Принять</button>
-                                                            </form>
+                    <span class="inline-grid grid-cols-7 gap-2 w-full text-center">
+                        @for ($w = 1; $w <= 4; $w++)
+                                    @foreach([1, 2, 3, 4, 5, 6, 7] as $d)
+                                        @php
+                                            $event = App\Models\Timetable::where('week', $w)->where('day', $d)->first();
+                                        @endphp
+                                        @if ($event)
+                                            <span class="bg-gray-700 p-2 rounded-lg flex flex-col content-between justify-between h-40 mb-4">
+                                                <div class="text-xs">{{$d}} день {{$w}} неделя</div>
+                                                <div class="font-bold">{{$event->subject->name}}</div>
+                                                <div class="text-sm">{{$event->user->name}}</div>
+                                                @if ($event->isAccept)
+                                                    <div class="">Принято</div>
+                                                @else
+                                                    <div class="">Ожидание</div>
+                                                @endif
+                                                @if ($auth->role == 'admin'|| $auth->id == $event->userID || $auth->id == $event->tutorID )
+                                                    <span class="flex flex-col">
+                                                        @if ($auth->role == 'admin' || $auth->id == $event->tutorID && !$event->isAccept)
+                                                        <form method="POST" action="{{ route('timetable.update', [$event->id]) }}" class="" autocomplete="off">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <input name="isAccept" class="hidden" value="1" required>
+                                                            <button class="border border-lime-600 text-lime-600 px-2 rounded-lg text-sm" type="submit">Принять</button>
+                                                        </form>
                                                         @endif
-                                                    @endif
-                                                    @if ($auth->role == 'admin'|| $auth->id == $event->userID || $auth->id == $event->tutorID )
-                                                        <form method="POST" action="{{ route('timetable.destroy', [$event->id]) }}" class="mb-3" autocomplete="off">
+                                                        <form method="POST" action="{{ route('timetable.destroy', [$event->id]) }}" class="" autocomplete="off">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button class="text-red-600" type="submit">Отклонить</button>
+                                                            <button class="border border-rose-600 text-rose-600 px-2 rounded-lg text-sm" type="submit">Отклонить</button>
                                                         </form>
-                                                    @endif
-                                                </td>
-                                            @else
-                                                <td class="text-center border-solid border hover:border-solid rounded-md">
-                                                    <div class="">{{$d}} день {{$w}} неделя</div>
-                                                    <form method="POST" action="{{route('timetable.store')}}" autocomplete="off">
-                                                        @csrf
-                                                        <input class="hidden" name="week" value="{{ $w }}" required >
-                                                        <input class="hidden" name="day" value="{{ $d }}" required >
-                                                        <input class="hidden" name="tutorID" value="{{ $tutor->id }}" required >
-                                                        <input class="hidden" name="subjectID" value="{{ $tutor->subject->id }}" required >
-                                                        <input class="hidden" name="userID" value="{{ $auth->id }}" required >
-                                                        <button class="text-yellow-600" type="submit">Свободно</button>
-                                                    </form>
-                                                </td>
-                                            @endif
-                                        @endforeach
-                                    </tr>
-                            @endfor
-
-                        </tbody>
-                      </table>
+                                                    </span>
+                                                @endif
+                                            </span>
+                                        @else
+                                            <span class="bg-gray-700 p-2 rounded-lg flex flex-col content-between justify-between h-40 mb-4">
+                                                <div class="text-xs">{{$d}} день {{$w}} неделя</div>
+                                                <div class="">Свободно</div>
+                                                <form method="POST" action="{{route('timetable.store')}}" autocomplete="off">
+                                                    @csrf
+                                                    <input class="hidden" name="week" value="{{ $w }}" required >
+                                                    <input class="hidden" name="day" value="{{ $d }}" required >
+                                                    <input class="hidden" name="tutorID" value="{{ $tutor->id }}" required >
+                                                    <input class="hidden" name="subjectID" value="{{ $tutor->subject->id }}" required >
+                                                    <input class="hidden" name="userID" value="{{ $auth->id }}" required >
+                                                    <button class="border px-2 rounded-lg text-sm" type="submit">Записаться</button>
+                                                </form>
+                                            </span>
+                                        @endif
+                                    @endforeach
+                        @endfor
+                    </span>
                 </div>
             </div>
         </div>
