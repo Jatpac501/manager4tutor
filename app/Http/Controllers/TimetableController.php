@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\EventProcessed;
 use App\Http\Requests\TimetableRequest;
 use App\Models\User;
 use App\Models\Subject;
@@ -9,6 +10,7 @@ use App\Models\Timetable;
 use Illuminate\Http\Request;
 use Mockery\Matcher\Subset;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\EventProcessedNotification;
 
 class TimetableController extends Controller
 {
@@ -25,7 +27,11 @@ class TimetableController extends Controller
      */
     public function store(TimetableRequest $request)
     {
-        Timetable::create($request->validated());
+        $validatedData = $request->validated();
+        $timetable = Timetable::create($validatedData);
+        $test = event(new EventProcessed($timetable));
+        auth()->user()->notify(new EventProcessedNotification());
+        dd($test);
         return redirect()->back();
     }
 
@@ -36,10 +42,12 @@ class TimetableController extends Controller
     {
         $auth = Auth::user();
         $timetable = Timetable::where('tutorID', $id)->get();
-        $tutor = User::find($id)->first();
+        $tutor = User::where('id', $id)->first();
         $users = User::get();
         $subjects = Subject::get();
-        return view('timetable', compact('auth','timetable', 'tutor', 'users','subjects'));
+        return $auth->role != null
+            ? view('timetable', compact('auth','timetable', 'tutor', 'users','subjects'))
+            : abort(403);
     }
 
     /**
@@ -56,7 +64,13 @@ class TimetableController extends Controller
      */
     public function destroy(string $id)
     {
-        Timetable::findOrFail($id)->delete();
-        return redirect()->back();
+        if (Auth::user()->role == 'admin' ||
+            Auth::user()->id == Timetable::findOrFail($id)->userID ||
+            Auth::user()->id == Timetable::findOrFail($id)->tutorID) {
+            Timetable::findOrFail($id)->delete();
+            return redirect()->back();
+        } else {
+            return abort(403);
+        }
     }
 }
